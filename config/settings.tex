@@ -1,0 +1,84 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% SETTINGS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Define accent color - Professional blue
+\definecolor{accentcolor}{RGB}{0, 79, 144} % Deep professional blue
+\definecolor{lightgrey}{RGB}{200, 200, 200} % Light grey for separators
+% Alternative options:
+% \definecolor{accentcolor}{RGB}{0, 102, 153} % Navy blue
+% \definecolor{accentcolor}{RGB}{0, 91, 127} % Teal blue
+% \definecolor{accentcolor}{RGB}{41, 72, 121} % Corporate blue
+
+% Separator spacing
+\newcommand{\separatorspacetop}{-0.25 cm}
+\newcommand{\separatorspacebottom}{-0.50 cm}
+
+% Layout settings
+\raggedright
+\AtBeginEnvironment{adjustwidth}{\partopsep0pt}
+\pagestyle{empty}
+\setcounter{secnumdepth}{0}
+\setlength{\parindent}{0pt}
+\setlength{\topskip}{0pt}
+\setlength{\columnsep}{0.15cm}
+\pagenumbering{gobble}
+
+% Section title formatting - with accent color
+\titleformat{\section}{\needspace{4\baselineskip}\bfseries\large\color{accentcolor}}{}{0pt}{}[\vspace{-8pt}\textcolor{accentcolor}{\titlerule}]
+
+\titlespacing{\section}{
+    -1pt
+}{
+    0.3 cm
+}{
+    0.2 cm
+}
+
+% Custom bullet points
+\renewcommand\labelitemi{$\vcenter{\hbox{\small$\bullet$}}$}
+
+% Highlights environment
+\newenvironment{highlights}{
+    \begin{itemize}[
+        topsep=0.10 cm,
+        parsep=0.05 cm,
+        partopsep=0pt,
+        itemsep=0pt,
+        leftmargin=0.4 cm
+    ]
+}{
+    \end{itemize}
+}
+
+% One column entry
+\newenvironment{onecolentry}{
+    \begin{adjustwidth}{
+        0 cm + 0.00001 cm
+    }{
+        0 cm + 0.00001 cm
+    }
+}{
+    \end{adjustwidth}
+}
+
+% Two column entry
+\newenvironment{twocolentry}[2][]{
+    \onecolentry
+    \def\secondColumn{#2}
+    \setcolumnwidth{\fill, 4.5 cm}
+    \begin{paracol}{2}
+}{
+    \switchcolumn \raggedleft \secondColumn
+    \end{paracol}
+    \endonecolentry}
+
+% Header environment
+\newenvironment{header}{
+    \setlength{\topsep}{0pt}\par\kern\topsep\centering\linespread{1.5}
+}{
+    \par\kern\topsep
+}
+
+% Save original href command
+\let\hrefWithoutArrow\href

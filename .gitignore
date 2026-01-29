@@ -1,0 +1,50 @@
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.toc
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+*.bbl
+*.blg
+*.bcf
+*.run.xml
+
+# Generated PDFs (output files)
+*.pdf
+
+# Generated .tex files (auto-created by build.ps1)
+cv.tex
+letter.tex
+sections/*.tex
+
+# Output directory
+output/
+
+# Personal data (keep only example)
+Data/PersonalResumeData.md
+photo.png
+
+# Motivation letters (keep only template)
+Data/MotivationLetters/*
+!Data/MotivationLetters/_TEMPLATE.md
+
+# Claude Code local settings
+.claude/*.local.json
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Backup files
+*.bak
+*.backup

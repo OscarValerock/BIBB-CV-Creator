@@ -1,0 +1,55 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% HEADER
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\AND}{\unskip
+    \cleaders\copy\ANDbox\hskip\wd\ANDbox
+    \ignorespaces
+}
+\newsavebox\ANDbox
+\sbox\ANDbox{$|$}
+
+\noindent\begin{minipage}[c]{0.78\textwidth}
+    \fontsize{25 pt}{25 pt}\selectfont\bfseries\color{accentcolor} {{NAME}}
+
+    \vspace{5 pt}
+
+    \small\color{gray}\textit{{{HEADLINE}}}
+
+    \vspace{8 pt}
+
+    \normalsize\color{black}
+    \mbox{{{LOCATION}}}%
+    \kern 5.0 pt%
+    \AND%
+    \kern 5.0 pt%
+    \mbox{\hrefWithoutArrow{mailto:{{EMAIL}}}{{{EMAIL}}}}%
+    \kern 5.0 pt%
+    \AND%
+    \kern 5.0 pt%
+    \mbox{\hrefWithoutArrow{tel:{{PHONE_TEL}}}{{{PHONE}}}}
+
+    \vspace{3 pt}
+
+    \mbox{\hrefWithoutArrow{{{LINKEDIN_URL}}}{{{LINKEDIN_DISPLAY}}}}%
+    \kern 5.0 pt%
+    \AND%
+    \kern 5.0 pt%
+    \mbox{\hrefWithoutArrow{{{GITHUB_URL}}}{{{GITHUB_DISPLAY}}}}%
+\end{minipage}%
+\hfill%
+\begin{minipage}[c]{0.19\textwidth}
+    \raggedleft
+    \IfFileExists{photo.png}{%
+        \includegraphics[width=2cm,height=2cm,keepaspectratio]{photo.png}%
+    }{%
+        \IfFileExists{photo.jpg}{%
+            \includegraphics[width=2cm,height=2cm,keepaspectratio]{photo.jpg}%
+        }{%
+            % Photo placeholder - save your photo as photo.png or photo.jpg
+        }%
+    }
+\end{minipage}
+
+\vspace{10 pt}
+
