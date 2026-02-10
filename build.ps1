@@ -1110,6 +1110,11 @@ function Generate-Sections {
 
     Write-Host "Generating sections from YAML data..." -ForegroundColor Cyan
 
+    # Ensure sections directory exists
+    if (-not (Test-Path $SectionsDir)) {
+        New-Item -ItemType Directory -Path $SectionsDir -Force | Out-Null
+    }
+
     $sections = $data.sections
     $generatedSections = @()
 

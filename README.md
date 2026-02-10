@@ -2,16 +2,26 @@
 
 A simple system to build professional PDF CVs and motivation letters from YAML data files.
 
+## Requirements
+
+- Windows with PowerShell
+- LaTeX (MiKTeX recommended): https://miktex.org/download
+- After installing MiKTeX, open **MiKTeX Console** and run **Updates** -> **Check for updates** -> **Update now**
+- In **Packages**, set **Install missing packages on-the-fly** to **Yes**
+
 ## Quick Start
 
 ### Build Your CV
 
-1. **Edit your data** in `Data/PersonalResumeData.md`
-2. **Build the PDF**:
+1. **Copy the example file**: `Data/PersonalResumeData.md.example` → `Data/PersonalResumeData.md`
+2. **Edit your data** in `Data/PersonalResumeData.md`
+3. **Build the PDF**:
    ```powershell
    .\build.ps1
    ```
-3. Your CV will be saved in `output/cv/[Your Name] (YYYY.MM.DD).pdf`
+4. Your CV will be saved in `output/cv/[Your Name] (YYYY.MM.DD).pdf`
+
+**Note:** The first build may take several minutes while MiKTeX downloads required packages.
 
 ### Build a Motivation Letter
 
@@ -24,11 +34,6 @@ A simple system to build professional PDF CVs and motivation letters from YAML d
 4. Your letter will be saved in `output/letters/[LetterName] (YYYY.MM.DD).pdf`
 
 Personal info (name, contact) is automatically pulled from your CV data file.
-
-## Requirements
-
-- Windows with PowerShell
-- LaTeX (MiKTeX recommended): https://miktex.org/download
 
 ## How It Works
 
@@ -123,6 +128,22 @@ CV-Creation/
 **Build fails?**
 - Check `cv.log` for error details
 - Make sure MiKTeX is installed and in your PATH
+
+**Cannot find PersonalResumeData.md?**
+- Copy `Data/PersonalResumeData.md.example` to `Data/PersonalResumeData.md` first
+
+**MiKTeX not activated / first run issues?**
+- Open **MiKTeX Console** and run **Updates** -> **Check for updates** -> **Update now**
+- In **Packages**, set **Install missing packages on-the-fly** to **Yes**
+- Close and reopen VS Code (not just the terminal) so PATH changes are picked up
+
+**pdflatex not recognized?**
+- Close and reopen VS Code (not just the terminal) so MiKTeX PATH is loaded
+- Verify with: `pdflatex --version`
+
+**First build taking forever?**
+- This is normal — MiKTeX downloads missing packages on first run (can take 2-10+ minutes)
+- Subsequent builds will be much faster
 
 **PDF not updating?**
 - Close the PDF if it's open in a viewer
