@@ -22,8 +22,9 @@ sections/*.tex
 # Output directory
 output/
 
-# Personal data (keep only example)
-Data/PersonalResumeData.md
+# Personal data (keep only examples)
+Data/PersonalResumeData_*.md
+!Data/PersonalResumeData_*.md.example
 photo.png
 
 # Motivation letters (keep only template)

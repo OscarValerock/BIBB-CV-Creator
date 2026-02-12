@@ -3,8 +3,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \phantomsection
-\addcontentsline{toc}{section}{Professional Summary}
-\section*{Professional Summary}
+\addcontentsline{toc}{section}{{{SECTION_TITLE}}}
+\section*{{{SECTION_TITLE}}}
 
 \begin{onecolentry}
     {{PROFESSIONAL_SUMMARY}}

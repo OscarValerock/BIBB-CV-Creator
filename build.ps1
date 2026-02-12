@@ -3,17 +3,23 @@
 
 param(
     [string]$Action = "build",
-    [string]$LetterName = ""
+    [string]$LetterName = "",
+    [string]$Lang = "en"
 )
 
 $ScriptDir = $PSScriptRoot
 if (-not $ScriptDir) { $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $ScriptDir) { $ScriptDir = Get-Location }
 
-$DataFile = Join-Path $ScriptDir "Data\PersonalResumeData.md"
+$DataFile = Join-Path $ScriptDir "Data\PersonalResumeData_$Lang.md"
+if (-not (Test-Path $DataFile)) {
+    Write-Host "[ERROR] Data file not found for language '$Lang': $DataFile" -ForegroundColor Red
+    exit 1
+}
 $LettersDir = Join-Path $ScriptDir "Data\MotivationLetters"
 $TemplatesDir = Join-Path $ScriptDir "templates"
 $SectionsDir = Join-Path $ScriptDir "sections"
+$ConfigDir = Join-Path $ScriptDir "config"
 $MainFile = Join-Path $ScriptDir "cv.tex"
 
 #######################################
@@ -83,7 +89,7 @@ function Parse-YamlContent {
             }
 
             # Remove quotes from value
-            if ($value -match '^"(.+)"$' -or $value -match "^'(.+)'$") {
+            if ($value -match '^"(.*)"$' -or $value -match "^'(.*)'$") {
                 $value = $matches[1]
             }
 
@@ -101,7 +107,7 @@ function Parse-YamlContent {
             $value = $matches[1].Trim()
 
             # Remove quotes
-            if ($value -match '^"(.+)"$' -or $value -match "^'(.+)'$") {
+            if ($value -match '^"(.*)"$' -or $value -match "^'(.*)'$") {
                 $value = $matches[1]
             }
 
@@ -139,6 +145,7 @@ function Parse-FullYaml {
     $data = @{
         sections = @{}
         contact = @{}
+        personal_details = @{}
         core_competencies = @{}
         experience = @()
         education = @()
@@ -206,7 +213,7 @@ function Parse-FullYaml {
             }
 
             # Remove quotes
-            if ($value -match '^"(.+)"$' -or $value -match "^'(.+)'$") {
+            if ($value -match '^"(.*)"$' -or $value -match "^'(.*)'$") {
                 $value = $matches[1]
             }
 
@@ -238,7 +245,7 @@ function Parse-FullYaml {
                 }
 
                 # Remove quotes
-                if ($value -match '^"(.+)"$' -or $value -match "^'(.+)'$") {
+                if ($value -match '^"(.*)"$' -or $value -match "^'(.*)'$") {
                     $value = $matches[1]
                 }
 
@@ -265,7 +272,7 @@ function Parse-FullYaml {
                 $value = $matches[1].Trim()
 
                 # Remove quotes
-                if ($value -match '^"(.+)"$' -or $value -match "^'(.+)'$") {
+                if ($value -match '^"(.*)"$' -or $value -match "^'(.*)'$") {
                     $value = $matches[1]
                 }
 
@@ -327,7 +334,7 @@ function Parse-FullYaml {
                 }
 
                 # Remove quotes
-                if ($value -match '^"(.+)"$' -or $value -match "^'(.+)'$") {
+                if ($value -match '^"(.*)"$' -or $value -match "^'(.*)'$") {
                     $value = $matches[1]
                 }
 
@@ -343,7 +350,7 @@ function Parse-FullYaml {
             # Nested array within item (indent 6, like achievements or technologies)
             if ($indent -eq 6 -and $currentItem -and $line -match '^\s{6}-\s*(.+)$') {
                 $value = $matches[1].Trim()
-                if ($value -match '^"(.+)"$' -or $value -match "^'(.+)'$") {
+                if ($value -match '^"(.*)"$' -or $value -match "^'(.*)'$") {
                     $value = $matches[1]
                 }
                 if ($currentSubSection -and $currentItem[$currentSubSection] -is [array]) {
@@ -355,7 +362,7 @@ function Parse-FullYaml {
             # Subsection array items (indent 4, like competency skills)
             if ($indent -eq 4 -and $currentSubSection -and -not $currentItem -and $line -match '^\s{4}-\s*(.+)$') {
                 $value = $matches[1].Trim()
-                if ($value -match '^"(.+)"$' -or $value -match "^'(.+)'$") {
+                if ($value -match '^"(.*)"$' -or $value -match "^'(.*)'$") {
                     $value = $matches[1]
                 }
                 if ($data[$currentSection] -is [hashtable] -and $data[$currentSection][$currentSubSection] -is [array]) {
@@ -409,6 +416,41 @@ function Parse-FullYaml {
 }
 
 #######################################
+# LANGUAGE LABELS
+#######################################
+
+function Load-Labels {
+    param([string]$LangCode)
+
+    $labelsFile = Join-Path $ConfigDir "labels_$LangCode.yaml"
+    if (-not (Test-Path $labelsFile)) {
+        # Fall back to base language (e.g. de_ch -> de)
+        $baseLang = ($LangCode -split '_')[0]
+        $labelsFile = Join-Path $ConfigDir "labels_$baseLang.yaml"
+        if (-not (Test-Path $labelsFile)) {
+            Write-Host "[ERROR] Labels file not found for '$LangCode' or '$baseLang'" -ForegroundColor Red
+            exit 1
+        }
+        Write-Host "  Using base language labels: labels_$baseLang.yaml" -ForegroundColor Yellow
+    }
+
+    $content = Get-Content $labelsFile -Raw -Encoding UTF8
+    $labels = @{}
+    foreach ($line in ($content -split "`r?`n")) {
+        if ($line -match '^\s*#' -or $line -match '^\s*$') { continue }
+        if ($line -match '^([^:]+):\s*"(.+)"$') {
+            $labels[$matches[1].Trim()] = $matches[2]
+        } elseif ($line -match "^([^:]+):\s*'(.+)'$") {
+            $labels[$matches[1].Trim()] = $matches[2]
+        } elseif ($line -match '^([^:]+):\s*(.+)$') {
+            $labels[$matches[1].Trim()] = $matches[2].Trim()
+        }
+    }
+
+    return $labels
+}
+
+#######################################
 # LATEX ESCAPING
 #######################################
 
@@ -456,7 +498,7 @@ function Escape-LaTeXKeepFormatting {
 #######################################
 
 function Generate-Header {
-    param($data)
+    param($data, $labels)
 
     $template = Get-Content "$TemplatesDir\header.tex.template" -Raw
 
@@ -482,11 +524,42 @@ function Generate-Header {
     $template = $template -replace '\{\{GITHUB_URL\}\}', $githubUrl
     $template = $template -replace '\{\{GITHUB_DISPLAY\}\}', $githubDisplay
 
+    # Personal details (optional — used in Swiss/DACH CVs)
+    # Controlled by sections.personal_details (default: true if block exists)
+    $personalDetailsBlock = ""
+    $showPersonalDetails = if ($data.sections.ContainsKey('personal_details')) { $data.sections.personal_details } else { $true }
+    if ($showPersonalDetails -and $data.personal_details) {
+        $pd = $data.personal_details
+        $fields = @()
+        if ($pd.date_of_birth) {
+            $lbl = if ($labels -and $labels.personal_date_of_birth) { $labels.personal_date_of_birth } else { "Date of Birth" }
+            $fields += "\mbox{$lbl`: $(Escape-LaTeX $pd.date_of_birth)}"
+        }
+        if ($pd.nationality) {
+            $lbl = if ($labels -and $labels.personal_nationality) { $labels.personal_nationality } else { "Nationality" }
+            $fields += "\mbox{$lbl`: $(Escape-LaTeX $pd.nationality)}"
+        }
+        if ($pd.residence) {
+            $lbl = if ($labels -and $labels.personal_residence) { $labels.personal_residence } else { "Residence" }
+            $fields += "\mbox{$lbl`: $(Escape-LaTeX $pd.residence)}"
+        }
+        if ($pd.marital_status) {
+            $lbl = if ($labels -and $labels.personal_marital_status) { $labels.personal_marital_status } else { "Marital Status" }
+            $fields += "\mbox{$lbl`: $(Escape-LaTeX $pd.marital_status)}"
+        }
+        if ($fields.Count -gt 0) {
+            $separator = "%`n    \kern 5.0 pt%`n    \AND%`n    \kern 5.0 pt%`n    "
+            $joined = $fields -join $separator
+            $personalDetailsBlock = "`n`n    \vspace{3 pt}`n`n    $joined"
+        }
+    }
+    $template = $template -replace '\{\{PERSONAL_DETAILS\}\}', $personalDetailsBlock
+
     return $template
 }
 
 function Generate-Summary {
-    param($data)
+    param($data, $labels)
 
     $template = Get-Content "$TemplatesDir\summary.tex.template" -Raw
 
@@ -495,28 +568,24 @@ function Generate-Summary {
     $summary = $summary -replace '(\d+\+?\s*years)', '\textbf{$1}'
     $summary = $summary -replace "(PwC Switzerland's enterprise data services platform)", '\textbf{$1}'
 
+    $template = $template -replace '\{\{SECTION_TITLE\}\}', $labels.section_professional_summary
     $template = $template -replace '\{\{PROFESSIONAL_SUMMARY\}\}', $summary
 
     return $template
 }
 
 function Generate-Skills {
-    param($data)
+    param($data, $labels)
 
     $template = Get-Content "$TemplatesDir\skills.tex.template" -Raw
 
     $content = @()
 
-    $competencyLabels = @{
-        'data_platforms_engineering' = 'Data Platforms \& Engineering'
-        'business_intelligence' = 'Business Intelligence'
-        'automation_development' = 'Automation \& Development'
-        'leadership_strategy' = 'Leadership \& Strategy'
-        'finance_expertise' = 'Finance Expertise'
-    }
+    # Build competency category list dynamically from data
+    $allCategories = @('data_platforms_engineering', 'business_intelligence', 'automation_development', 'full_stack_web', 'leadership_strategy', 'finance_expertise', 'enterprise_systems')
 
     $first = $true
-    foreach ($category in @('data_platforms_engineering', 'business_intelligence', 'automation_development', 'leadership_strategy', 'finance_expertise')) {
+    foreach ($category in $allCategories) {
         if ($data.core_competencies[$category] -and $data.core_competencies[$category].Count -gt 0) {
             if (-not $first) {
                 $content += "\vspace{0.2 cm}"
@@ -524,7 +593,7 @@ function Generate-Skills {
             }
             $first = $false
 
-            $label = $competencyLabels[$category]
+            $label = $labels["comp_$category"]
             $skills = ($data.core_competencies[$category] | ForEach-Object { $_ -replace '"', '' }) -join ', '
             $skills = $skills -replace '&', '\&'
 
@@ -534,28 +603,32 @@ function Generate-Skills {
         }
     }
 
+    $template = $template -replace '\{\{SECTION_TITLE\}\}', $labels.section_core_competencies
     $template = $template -replace '\{\{COMPETENCIES_CONTENT\}\}', ($content -join "`n")
 
     return $template
 }
 
 function Format-DateRange {
-    param([string]$startDate, [string]$endDate)
+    param([string]$startDate, [string]$endDate, $labels)
 
-    # Convert YYYY-MM to MM/YYYY
+    $sep = if ($labels -and $labels.date_separator) { $labels.date_separator } else { "/" }
+    $presentLabel = if ($labels -and $labels.present) { $labels.present } else { "Present" }
+
+    # Convert YYYY-MM to MM{sep}YYYY
     $start = ""
     $end = ""
 
     if ($startDate -match '^(\d{4})-(\d{2})$') {
-        $start = "$($matches[2])/$($matches[1])"
+        $start = "$($matches[2])$sep$($matches[1])"
     } else {
         $start = $startDate
     }
 
     if ($endDate -eq 'Present') {
-        $end = 'Present'
+        $end = $presentLabel
     } elseif ($endDate -match '^(\d{4})-(\d{2})$') {
-        $end = "$($matches[2])/$($matches[1])"
+        $end = "$($matches[2])$sep$($matches[1])"
     } else {
         $end = $endDate
     }
@@ -564,7 +637,7 @@ function Format-DateRange {
 }
 
 function Generate-Experience {
-    param($data)
+    param($data, $labels)
 
     $template = Get-Content "$TemplatesDir\experience.tex.template" -Raw
 
@@ -578,7 +651,7 @@ function Generate-Experience {
         }
         $first = $false
 
-        $dateRange = Format-DateRange $job.start_date $job.end_date
+        $dateRange = Format-DateRange $job.start_date $job.end_date $labels
         $title = $job.title -replace '&', '\&'
         $company = $job.company -replace '&', '\&'
         $location = $job.location
@@ -628,13 +701,14 @@ function Generate-Experience {
         $content += "\end{onecolentry}"
     }
 
+    $template = $template -replace '\{\{SECTION_TITLE\}\}', $labels.section_experience
     $template = $template -replace '\{\{EXPERIENCE_CONTENT\}\}', ($content -join "`n")
 
     return $template
 }
 
 function Generate-Education {
-    param($data)
+    param($data, $labels)
 
     $template = Get-Content "$TemplatesDir\education.tex.template" -Raw
 
@@ -660,13 +734,14 @@ function Generate-Education {
         $content += "\end{twocolentry}"
     }
 
+    $template = $template -replace '\{\{SECTION_TITLE\}\}', $labels.section_education
     $template = $template -replace '\{\{EDUCATION_CONTENT\}\}', ($content -join "`n")
 
     return $template
 }
 
 function Generate-Certifications {
-    param($data)
+    param($data, $labels)
 
     $template = Get-Content "$TemplatesDir\certifications.tex.template" -Raw
 
@@ -687,13 +762,14 @@ function Generate-Certifications {
         $content += "\end{onecolentry}"
     }
 
+    $template = $template -replace '\{\{SECTION_TITLE\}\}', $labels.section_certifications
     $template = $template -replace '\{\{CERTIFICATIONS_CONTENT\}\}', ($content -join "`n")
 
     return $template
 }
 
 function Generate-Languages {
-    param($data)
+    param($data, $labels)
 
     $template = Get-Content "$TemplatesDir\languages.tex.template" -Raw
 
@@ -704,13 +780,14 @@ function Generate-Languages {
 
     $content = $langs -join ', '
 
+    $template = $template -replace '\{\{SECTION_TITLE\}\}', $labels.section_languages
     $template = $template -replace '\{\{LANGUAGES_CONTENT\}\}', $content
 
     return $template
 }
 
 function Generate-Interests {
-    param($data)
+    param($data, $labels)
 
     $template = Get-Content "$TemplatesDir\interests.tex.template" -Raw
 
@@ -750,13 +827,14 @@ function Generate-Interests {
         }
     }
 
+    $template = $template -replace '\{\{SECTION_TITLE\}\}', $labels.section_interests
     $template = $template -replace '\{\{INTERESTS_CONTENT\}\}', ($content -join "`n")
 
     return $template
 }
 
 function Generate-Projects {
-    param($data)
+    param($data, $labels)
 
     $template = Get-Content "$TemplatesDir\projects.tex.template" -Raw
 
@@ -779,13 +857,14 @@ function Generate-Projects {
         $content += "\end{onecolentry}"
     }
 
+    $template = $template -replace '\{\{SECTION_TITLE\}\}', $labels.section_projects
     $template = $template -replace '\{\{PROJECTS_CONTENT\}\}', ($content -join "`n")
 
     return $template
 }
 
 function Generate-Testimonials {
-    param($data)
+    param($data, $labels)
 
     $template = Get-Content "$TemplatesDir\testimonials.tex.template" -Raw
 
@@ -817,6 +896,7 @@ function Generate-Testimonials {
         $content += "\end{onecolentry}"
     }
 
+    $template = $template -replace '\{\{SECTION_TITLE\}\}', $labels.section_testimonials
     $template = $template -replace '\{\{TESTIMONIALS_CONTENT\}\}', ($content -join "`n")
 
     return $template
@@ -884,9 +964,14 @@ function Build-Letter {
     Write-Host "  [OK] Data loaded successfully" -ForegroundColor Green
     Write-Host ""
 
+    # Load language labels
+    Write-Host "Loading language labels ($Lang)..." -ForegroundColor Cyan
+    $labels = Load-Labels $Lang
+    Write-Host "  [OK] Labels loaded" -ForegroundColor Green
+
     # Generate letter .tex file
     Write-Host "Generating letter.tex..." -ForegroundColor Cyan
-    $letterTex = Generate-LetterTex $personalData $letterData
+    $letterTex = Generate-LetterTex $personalData $letterData $labels
     $letterTexFile = Join-Path $ScriptDir "letter.tex"
     # Write UTF-8 without BOM for LaTeX compatibility
     [System.IO.File]::WriteAllText($letterTexFile, $letterTex, [System.Text.UTF8Encoding]::new($false))
@@ -1010,7 +1095,7 @@ function Parse-LetterYaml {
             }
 
             # Remove quotes
-            if ($value -match '^"(.+)"$' -or $value -match "^'(.+)'$") {
+            if ($value -match '^"(.*)"$' -or $value -match "^'(.*)'$") {
                 $value = $matches[1]
             }
 
@@ -1027,7 +1112,7 @@ function Parse-LetterYaml {
         if ($currentSection -eq 'recipient' -and $indent -eq 2 -and $line -match '^\s{2}([^:]+):\s*(.*)$') {
             $key = $matches[1].Trim()
             $value = $matches[2].Trim()
-            if ($value -match '^"(.+)"$' -or $value -match "^'(.+)'$") {
+            if ($value -match '^"(.*)"$' -or $value -match "^'(.*)'$") {
                 $value = $matches[1]
             }
             $data.recipient[$key] = $value
@@ -1044,7 +1129,7 @@ function Parse-LetterYaml {
 }
 
 function Generate-LetterTex {
-    param($personalData, $letterData)
+    param($personalData, $letterData, $labels)
 
     $template = Get-Content "$TemplatesDir\letter.tex.template" -Raw -Encoding UTF8
 
@@ -1071,8 +1156,14 @@ function Generate-LetterTex {
     # Date - use today if not specified
     $date = $letterData.date
     if ([string]::IsNullOrEmpty($date)) {
-        $date = Get-Date -Format "MMMM d, yyyy"
+        $dateFormat = if ($labels -and $labels.letter_date_format) { $labels.letter_date_format } else { "MMMM d, yyyy" }
+        $cultureName = if ($labels -and $labels.letter_date_culture) { $labels.letter_date_culture } else { "en-US" }
+        $culture = [System.Globalization.CultureInfo]::new($cultureName)
+        $date = (Get-Date).ToString($dateFormat, $culture)
     }
+
+    # Subject prefix from labels
+    $subjectPrefix = if ($labels -and $labels.letter_subject_prefix) { $labels.letter_subject_prefix } else { "Re:" }
 
     # Body - convert paragraphs to LaTeX
     $body = $letterData.body
@@ -1093,6 +1184,7 @@ function Generate-LetterTex {
     $template = $template -replace '\{\{RECIPIENT_TITLE\}\}', $recipientTitle
     $template = $template -replace '\{\{COMPANY_NAME\}\}', $companyName
     $template = $template -replace '\{\{COMPANY_ADDRESS\}\}', $companyAddress
+    $template = $template -replace '\{\{SUBJECT_PREFIX\}\}', $subjectPrefix
     $template = $template -replace '\{\{SUBJECT\}\}', $subject
     $template = $template -replace '\{\{SALUTATION\}\}', $salutation
     $template = $template -replace '\{\{BODY\}\}', $body
@@ -1106,7 +1198,7 @@ function Generate-LetterTex {
 #######################################
 
 function Generate-Sections {
-    param($data)
+    param($data, $labels)
 
     Write-Host "Generating sections from YAML data..." -ForegroundColor Cyan
 
@@ -1120,7 +1212,7 @@ function Generate-Sections {
 
     # Header (always generated if enabled)
     if ($sections.header -eq $true) {
-        $content = Generate-Header $data
+        $content = Generate-Header $data $labels
         Set-Content -Path "$SectionsDir\header.tex" -Value $content -Encoding UTF8
         $generatedSections += 'header'
         Write-Host "  [OK] header.tex" -ForegroundColor Green
@@ -1128,7 +1220,7 @@ function Generate-Sections {
 
     # Professional Summary
     if ($sections.professional_summary -eq $true -and $data.professional_summary) {
-        $content = Generate-Summary $data
+        $content = Generate-Summary $data $labels
         Set-Content -Path "$SectionsDir\summary.tex" -Value $content -Encoding UTF8
         $generatedSections += 'summary'
         Write-Host "  [OK] summary.tex" -ForegroundColor Green
@@ -1136,7 +1228,7 @@ function Generate-Sections {
 
     # Core Competencies
     if ($sections.core_competencies -eq $true -and $data.core_competencies.Count -gt 0) {
-        $content = Generate-Skills $data
+        $content = Generate-Skills $data $labels
         Set-Content -Path "$SectionsDir\skills.tex" -Value $content -Encoding UTF8
         $generatedSections += 'skills'
         Write-Host "  [OK] skills.tex" -ForegroundColor Green
@@ -1144,7 +1236,7 @@ function Generate-Sections {
 
     # Experience
     if ($sections.experience -eq $true -and $data.experience.Count -gt 0) {
-        $content = Generate-Experience $data
+        $content = Generate-Experience $data $labels
         Set-Content -Path "$SectionsDir\experience.tex" -Value $content -Encoding UTF8
         $generatedSections += 'experience'
         Write-Host "  [OK] experience.tex" -ForegroundColor Green
@@ -1152,7 +1244,7 @@ function Generate-Sections {
 
     # Education
     if ($sections.education -eq $true -and $data.education.Count -gt 0) {
-        $content = Generate-Education $data
+        $content = Generate-Education $data $labels
         Set-Content -Path "$SectionsDir\education.tex" -Value $content -Encoding UTF8
         $generatedSections += 'education'
         Write-Host "  [OK] education.tex" -ForegroundColor Green
@@ -1160,7 +1252,7 @@ function Generate-Sections {
 
     # Certifications
     if ($sections.certifications -eq $true -and $data.certifications.Count -gt 0) {
-        $content = Generate-Certifications $data
+        $content = Generate-Certifications $data $labels
         Set-Content -Path "$SectionsDir\certifications.tex" -Value $content -Encoding UTF8
         $generatedSections += 'certifications'
         Write-Host "  [OK] certifications.tex" -ForegroundColor Green
@@ -1168,7 +1260,7 @@ function Generate-Sections {
 
     # Languages
     if ($sections.languages -eq $true -and $data.languages.Count -gt 0) {
-        $content = Generate-Languages $data
+        $content = Generate-Languages $data $labels
         Set-Content -Path "$SectionsDir\languages.tex" -Value $content -Encoding UTF8
         $generatedSections += 'languages'
         Write-Host "  [OK] languages.tex" -ForegroundColor Green
@@ -1176,7 +1268,7 @@ function Generate-Sections {
 
     # Interests & Volunteering
     if ($sections.interests_volunteering -eq $true -and $data.interests_volunteering.Count -gt 0) {
-        $content = Generate-Interests $data
+        $content = Generate-Interests $data $labels
         Set-Content -Path "$SectionsDir\interests.tex" -Value $content -Encoding UTF8
         $generatedSections += 'interests'
         Write-Host "  [OK] interests.tex" -ForegroundColor Green
@@ -1184,7 +1276,7 @@ function Generate-Sections {
 
     # Community & Open-Source Projects
     if ($sections.community_open_source_projects -eq $true -and $data.community_open_source_projects.Count -gt 0) {
-        $content = Generate-Projects $data
+        $content = Generate-Projects $data $labels
         Set-Content -Path "$SectionsDir\projects.tex" -Value $content -Encoding UTF8
         $generatedSections += 'projects'
         Write-Host "  [OK] projects.tex" -ForegroundColor Green
@@ -1192,7 +1284,7 @@ function Generate-Sections {
 
     # Testimonials
     if ($sections.testimonials -eq $true -and $data.testimonials.Count -gt 0) {
-        $content = Generate-Testimonials $data
+        $content = Generate-Testimonials $data $labels
         Set-Content -Path "$SectionsDir\testimonials.tex" -Value $content -Encoding UTF8
         $generatedSections += 'testimonials'
         Write-Host "  [OK] testimonials.tex" -ForegroundColor Green
@@ -1257,8 +1349,13 @@ function Generate-MainTex {
 }
 
 function Build-CV {
-    Write-Host "Building CV..." -ForegroundColor Green
+    Write-Host "Building CV ($Lang)..." -ForegroundColor Green
     Write-Host ""
+
+    # Load language labels
+    Write-Host "Loading language labels ($Lang)..." -ForegroundColor Cyan
+    $labels = Load-Labels $Lang
+    Write-Host "  [OK] Labels loaded" -ForegroundColor Green
 
     # Parse YAML data
     Write-Host "Parsing YAML data from $DataFile..." -ForegroundColor Cyan
@@ -1273,7 +1370,7 @@ function Build-CV {
     Write-Host ""
 
     # Generate section files
-    $enabledSections = Generate-Sections $data
+    $enabledSections = Generate-Sections $data $labels
 
     Write-Host ""
 
@@ -1300,13 +1397,13 @@ function Build-CV {
             New-Item -ItemType Directory -Path $cvOutputDir -Force | Out-Null
         }
 
-        # Rename to "[Name] (yyyy.MM.dd).pdf"
-        $date = Get-Date -Format "yyyy.MM.dd"
+        # Rename to "Name LastName yyyyMMdd_lang.pdf"
+        $date = Get-Date -Format "yyyyMMdd"
         # Get name from YAML, format as title case, remove accents
         $name = $data.name -replace '"', ''
         $name = [Text.Encoding]::ASCII.GetString([Text.Encoding]::GetEncoding("Cyrillic").GetBytes($name))
         $name = (Get-Culture).TextInfo.ToTitleCase($name.ToLower())
-        $outputName = Join-Path $cvOutputDir "$name ($date).pdf"
+        $outputName = Join-Path $cvOutputDir "${name} ${date}_$Lang.pdf"
         # Remove existing file if present, then move
         if (Test-Path $outputName) {
             Remove-Item $outputName -Force
@@ -1387,12 +1484,12 @@ function Compile-Only {
             New-Item -ItemType Directory -Path $cvOutputDir -Force | Out-Null
         }
 
-        # Rename to "[Name] (yyyy.MM.dd).pdf"
-        $date = Get-Date -Format "yyyy.MM.dd"
+        # Rename to "Name LastName yyyyMMdd_lang.pdf"
+        $date = Get-Date -Format "yyyyMMdd"
         $name = $data.name -replace '"', ''
         $name = [Text.Encoding]::ASCII.GetString([Text.Encoding]::GetEncoding("Cyrillic").GetBytes($name))
         $name = (Get-Culture).TextInfo.ToTitleCase($name.ToLower())
-        $outputName = Join-Path $cvOutputDir "$name ($date).pdf"
+        $outputName = Join-Path $cvOutputDir "${name} ${date}_$Lang.pdf"
         if (Test-Path $outputName) {
             Remove-Item $outputName -Force
         }
@@ -1423,9 +1520,10 @@ switch ($Action.ToLower()) {
     }
     "generate" {
         # Only generate tex files without compiling
-        Write-Host "Generating .tex files from YAML..." -ForegroundColor Green
+        Write-Host "Generating .tex files from YAML ($Lang)..." -ForegroundColor Green
+        $labels = Load-Labels $Lang
         $data = Parse-FullYaml $DataFile
-        $enabledSections = Generate-Sections $data
+        $enabledSections = Generate-Sections $data $labels
         Generate-MainTex $enabledSections
         Write-Host ""
         Write-Host "[OK] Generation complete! Run 'compile' to build PDF from existing .tex files." -ForegroundColor Green
@@ -1454,7 +1552,7 @@ switch ($Action.ToLower()) {
         Build-Letter $LetterName
     }
     default {
-        Write-Host "Usage: .\build.ps1 [build|clean|rebuild|generate|compile|letter]" -ForegroundColor Yellow
+        Write-Host "Usage: .\build.ps1 [build|clean|rebuild|generate|compile|letter] [-Lang <code>]" -ForegroundColor Yellow
         Write-Host ""
         Write-Host "CV Commands:" -ForegroundColor Cyan
         Write-Host "  build    - Generate .tex files from YAML and compile CV (default)" -ForegroundColor Gray
@@ -1466,8 +1564,14 @@ switch ($Action.ToLower()) {
         Write-Host "Letter Commands:" -ForegroundColor Cyan
         Write-Host "  letter <name> - Build a motivation letter from Data/MotivationLetters/<name>.md" -ForegroundColor Gray
         Write-Host ""
+        Write-Host "Options:" -ForegroundColor Cyan
+        Write-Host "  -Lang <code>  - Language code (default: en). Uses Data/PersonalResumeData_<code>.md" -ForegroundColor Gray
+        Write-Host "                  and config/labels_<code>.yaml for translations." -ForegroundColor Gray
+        Write-Host ""
         Write-Host "Examples:" -ForegroundColor Yellow
-        Write-Host "  .\build.ps1                        # Build CV" -ForegroundColor Gray
+        Write-Host "  .\build.ps1                        # Build CV (English)" -ForegroundColor Gray
+        Write-Host "  .\build.ps1 -Lang de               # Build CV (German)" -ForegroundColor Gray
+        Write-Host "  .\build.ps1 rebuild -Lang de        # Clean + build German CV" -ForegroundColor Gray
         Write-Host "  .\build.ps1 letter Google_DataEng  # Build motivation letter" -ForegroundColor Gray
     }
 }

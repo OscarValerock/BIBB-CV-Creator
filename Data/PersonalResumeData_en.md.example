@@ -2,9 +2,9 @@
 # =============================================================================
 # CV DATA FILE - EXAMPLE
 # =============================================================================
-# Copy this file to PersonalResumeData.md and edit with your information
+# Copy this file to PersonalResumeData_en.md and edit with your information
 # Then run: .\build.ps1
-# Output: [Your Name] (YYYY.MM.DD).pdf
+# Output: [Your Name] YYYYMMDD_en.pdf
 # =============================================================================
 
 version: 2.3
@@ -38,6 +38,14 @@ contact:
   email: "john.doe@example.com"
   linkedin: "https://linkedin.com/in/johndoe"
   github: "https://github.com/johndoe"
+
+# Optional: Personal details (common in Swiss/DACH CVs)
+# Uncomment and fill in to display in the header
+# personal_details:
+#   date_of_birth: "March 15, 1985"
+#   nationality: "US Citizen"
+#   residence: "New York, USA"
+#   marital_status: "Married, 2 children"
 
 # -----------------------------------------------------------------------------
 # PROFESSIONAL SUMMARY

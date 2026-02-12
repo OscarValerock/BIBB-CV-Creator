@@ -3,8 +3,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \phantomsection
-\addcontentsline{toc}{section}{Languages}
-\section*{Languages}
+\addcontentsline{toc}{section}{{{SECTION_TITLE}}}
+\section*{{{SECTION_TITLE}}}
 
 \begin{onecolentry}
     {{LANGUAGES_CONTENT}}

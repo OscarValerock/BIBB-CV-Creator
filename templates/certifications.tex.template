@@ -3,7 +3,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \phantomsection
-\addcontentsline{toc}{section}{Certifications}
-\section*{Certifications}
+\addcontentsline{toc}{section}{{{SECTION_TITLE}}}
+\section*{{{SECTION_TITLE}}}
 
 {{CERTIFICATIONS_CONTENT}}

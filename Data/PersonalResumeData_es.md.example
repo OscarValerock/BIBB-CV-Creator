@@ -1,0 +1,208 @@
+---
+# =============================================================================
+# ARCHIVO DE DATOS DEL CV - EJEMPLO
+# =============================================================================
+# Copia este archivo a PersonalResumeData_es.md y edítalo con tu información
+# Luego ejecuta: .\build.ps1 -Lang es
+# Salida: [Tu Nombre] YYYYMMDD_es.pdf
+# =============================================================================
+
+version: 2.3
+last_updated: 2026-01-01
+
+# -----------------------------------------------------------------------------
+# VISIBILIDAD DE SECCIONES
+# Establece false para ocultar una sección del CV
+# -----------------------------------------------------------------------------
+sections:
+  header: true
+  professional_summary: true
+  core_competencies: true
+  experience: true
+  education: true
+  certifications: true
+  languages: true
+  interests_volunteering: true
+  community_open_source_projects: true
+  testimonials: true
+
+# -----------------------------------------------------------------------------
+# INFORMACIÓN PERSONAL
+# -----------------------------------------------------------------------------
+name: "JOHN DOE"
+headline: "Ingeniero de Software | Desarrollador Full Stack | Soluciones Cloud"
+location: "Nueva York, EE.UU."
+
+contact:
+  phone: "+1 (555) 123-4567"
+  email: "john.doe@example.com"
+  linkedin: "https://linkedin.com/in/johndoe"
+  github: "https://github.com/johndoe"
+
+# Opcional: Datos personales (común en CVs suizos/DACH)
+# Descomenta y completa para mostrar en el encabezado
+# personal_details:
+#   date_of_birth: "15 de marzo de 1985"
+#   nationality: "Ciudadano estadounidense"
+#   residence: "Nueva York, EE.UU."
+#   marital_status: "Casado/a, 2 hijos"
+
+# -----------------------------------------------------------------------------
+# RESUMEN PROFESIONAL
+# Usa > para texto multilínea
+# -----------------------------------------------------------------------------
+professional_summary: >
+  Ingeniero de software con más de 10 años de experiencia construyendo aplicaciones web escalables e infraestructura cloud. Apasionado por el código limpio, las prácticas DevOps y la mentoría de desarrolladores junior. Historial comprobado de entrega de proyectos de alto impacto dentro de plazo y presupuesto.
+
+# -----------------------------------------------------------------------------
+# COMPETENCIAS CLAVE / HABILIDADES
+# Agrupadas por categoría
+# -----------------------------------------------------------------------------
+core_competencies:
+  data_platforms_engineering:
+    - "PostgreSQL"
+    - "MongoDB"
+    - "Redis"
+    - "Elasticsearch"
+    - "Modelado de Datos"
+  business_intelligence:
+    - "Tableau"
+    - "Power BI"
+    - "SQL"
+    - "Visualización de Datos"
+  automation_development:
+    - "Python"
+    - "JavaScript/TypeScript"
+    - "Go"
+    - "Docker"
+    - "Kubernetes"
+    - "CI/CD"
+  leadership_strategy:
+    - "Agile/Scrum"
+    - "Liderazgo de Equipos"
+    - "Arquitectura Técnica"
+    - "Code Reviews"
+    - "Mentoría"
+  finance_expertise:
+    - "Planificación Presupuestaria"
+    - "Optimización de Costos"
+    - "Gestión de Proveedores"
+
+# -----------------------------------------------------------------------------
+# EXPERIENCIA
+# Cada puesto requiere: title, company, location, start_date, end_date
+# Opcional: company_url, description/responsibilities, achievements
+# Formato de fechas: YYYY-MM (ej., 2024-07) o "Present"
+# -----------------------------------------------------------------------------
+experience:
+  - title: "Ingeniero de Software Sénior"
+    company: "Tech Corp"
+    company_url: "https://www.techcorp.example.com/"
+    location: "Nueva York, EE.UU."
+    start_date: "2021-03"
+    end_date: "Present"
+    responsibilities: >
+      Liderazgo del desarrollo backend del producto principal de la empresa, mentoría de un equipo de 5 ingenieros y dirección de decisiones arquitectónicas.
+    achievements:
+      - "Redujo el tiempo de respuesta de la API en un 60% mediante optimización de base de datos y estrategias de caché."
+      - "Lideró la migración de arquitectura monolítica a microservicios, mejorando la frecuencia de despliegue en un 300%."
+      - "Implementó pipeline de pruebas automatizadas alcanzando un 95% de cobertura de código."
+
+  - title: "Ingeniero de Software"
+    company: "StartupXYZ"
+    location: "San Francisco, EE.UU."
+    start_date: "2018-06"
+    end_date: "2021-02"
+    description: >
+      Desarrollo full-stack usando React, Node.js y AWS. Colaboración con el equipo de producto para entregar funcionalidades orientadas al usuario.
+    achievements:
+      - "Construyó sistema de notificaciones en tiempo real para más de 100K usuarios activos diarios."
+      - "Desarrolló APIs RESTful consumidas por clientes móviles y web."
+      - "Mentorizó a 3 desarrolladores junior durante su incorporación y code reviews."
+
+  - title: "Desarrollador Junior"
+    company: "Agency Inc"
+    location: "Boston, EE.UU."
+    start_date: "2015-01"
+    end_date: "2018-05"
+    achievements:
+      - "Entregó más de 20 proyectos de clientes usando WordPress, PHP y JavaScript."
+      - "Introdujo flujo de trabajo basado en Git mejorando la colaboración del equipo."
+
+# -----------------------------------------------------------------------------
+# FORMACIÓN ACADÉMICA
+# Cada entrada: degree, institution, location, start_year, end_year
+# -----------------------------------------------------------------------------
+education:
+  - degree: "MSc – Ciencias de la Computación"
+    institution: "MIT"
+    location: "Cambridge, EE.UU."
+    start_year: "2013"
+    end_year: "2015"
+  - degree: "BSc – Ingeniería de Software"
+    institution: "State University"
+    location: "Boston, EE.UU."
+    start_year: "2009"
+    end_year: "2013"
+
+# -----------------------------------------------------------------------------
+# CERTIFICACIONES
+# Lista simple de nombres de certificaciones
+# -----------------------------------------------------------------------------
+certifications:
+  - "AWS Solutions Architect Professional"
+  - "Kubernetes Administrator (CKA)"
+  - "Google Cloud Professional Data Engineer"
+
+# -----------------------------------------------------------------------------
+# IDIOMAS
+# Cada uno: nombre del idioma y nivel de competencia
+# -----------------------------------------------------------------------------
+languages:
+  - language: "Inglés"
+    level: "Nativo"
+  - language: "Español"
+    level: "Intermedio"
+
+# -----------------------------------------------------------------------------
+# INTERESES Y VOLUNTARIADO
+# Formato: "Categoría: Descripción"
+# -----------------------------------------------------------------------------
+interests_volunteering:
+  - "Voluntariado: Instructor de programación en el centro comunitario local, enseñando a jóvenes desfavorecidos."
+  - "Open Source: Contribuidor activo a varias bibliotecas populares de JavaScript."
+
+# -----------------------------------------------------------------------------
+# PROYECTOS COMUNITARIOS Y OPEN-SOURCE
+# Cada uno: title, url, description, technologies (opcional)
+# -----------------------------------------------------------------------------
+community_open_source_projects:
+  - title: "Awesome Project"
+    url: "https://github.com/johndoe/awesome-project"
+    description: "Herramienta CLI para automatizar flujos de trabajo de desarrollo con más de 500 estrellas en GitHub."
+    technologies:
+      - "Go"
+      - "Docker"
+      - "GitHub Actions"
+  - title: "React Component Library"
+    url: "https://github.com/johndoe/react-components"
+    description: "Componentes React reutilizables con soporte TypeScript y documentación completa."
+    technologies:
+      - "React"
+      - "TypeScript"
+      - "Storybook"
+
+# -----------------------------------------------------------------------------
+# TESTIMONIOS
+# Cada uno: quote (usa > para multilínea) y source
+# -----------------------------------------------------------------------------
+testimonials:
+  - quote: >
+      "John es un ingeniero excepcional que consistentemente entrega trabajo de alta calidad.
+      Su experiencia técnica y enfoque colaborativo lo hacen invaluable para cualquier equipo."
+    source: "Engineering Manager, Tech Corp"
+  - quote: >
+      "Trabajar con John fue un placer. Tiene la habilidad única de descomponer problemas complejos
+      y comunicar soluciones claramente tanto a stakeholders técnicos como no técnicos."
+    source: "Product Manager, StartupXYZ"
+---

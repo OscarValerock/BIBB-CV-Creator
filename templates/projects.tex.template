@@ -3,7 +3,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \phantomsection
-\addcontentsline{toc}{section}{Community \& Open-Source Projects}
-\section*{Community \& Open-Source Projects}
+\addcontentsline{toc}{section}{{{SECTION_TITLE}}}
+\section*{{{SECTION_TITLE}}}
 
 {{PROJECTS_CONTENT}}

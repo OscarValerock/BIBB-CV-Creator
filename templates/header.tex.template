@@ -36,6 +36,7 @@
     \AND%
     \kern 5.0 pt%
     \mbox{\hrefWithoutArrow{{{GITHUB_URL}}}{{{GITHUB_DISPLAY}}}}%
+{{PERSONAL_DETAILS}}
 \end{minipage}%
 \hfill%
 \begin{minipage}[c]{0.19\textwidth}

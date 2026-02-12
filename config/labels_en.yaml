@@ -1,0 +1,40 @@
+# =============================================================================
+# LANGUAGE LABELS - English (en)
+# =============================================================================
+# Section titles, UI labels, and structural text for CV generation
+# =============================================================================
+
+# Section Titles
+section_professional_summary: "Professional Summary"
+section_core_competencies: "Core Competencies"
+section_experience: "Professional Experience"
+section_education: "Education"
+section_certifications: "Certifications"
+section_languages: "Languages"
+section_interests: "Interests \& Volunteering"
+section_projects: "Community \& Open-Source Projects"
+section_testimonials: "Testimonials"
+
+# Date labels
+present: "Present"
+date_separator: "/"
+
+# Competency category labels
+comp_data_platforms_engineering: "Data Platforms \& Engineering"
+comp_business_intelligence: "Business Intelligence"
+comp_automation_development: "Automation \& Development"
+comp_full_stack_web: "Full Stack Web"
+comp_leadership_strategy: "Leadership \& Strategy"
+comp_finance_expertise: "Finance Expertise"
+comp_enterprise_systems: "Enterprise Systems"
+
+# Personal details labels (optional, for DACH/Swiss CVs)
+personal_date_of_birth: "Date of Birth"
+personal_nationality: "Nationality"
+personal_residence: "Residence"
+personal_marital_status: "Marital Status"
+
+# Letter labels
+letter_subject_prefix: "Re:"
+letter_date_format: "MMMM d, yyyy"
+letter_date_culture: "en-US"

@@ -1,0 +1,40 @@
+# =============================================================================
+# LANGUAGE LABELS - Deutsch (de)
+# =============================================================================
+# Abschnittstitel, UI-Labels und struktureller Text für die CV-Generierung
+# =============================================================================
+
+# Abschnittstitel
+section_professional_summary: "Berufliche Zusammenfassung"
+section_core_competencies: "Kernkompetenzen"
+section_experience: "Berufserfahrung"
+section_education: "Ausbildung"
+section_certifications: "Zertifizierungen"
+section_languages: "Sprachen"
+section_interests: "Interessen \& Ehrenamt"
+section_projects: "Community- \& Open-Source-Projekte"
+section_testimonials: "Referenzen"
+
+# Datumslabels
+present: "Aktuell"
+date_separator: "."
+
+# Kompetenz-Kategorien
+comp_data_platforms_engineering: "Datenplattformen \& Engineering"
+comp_business_intelligence: "Business Intelligence"
+comp_automation_development: "Automatisierung \& Entwicklung"
+comp_full_stack_web: "Full Stack Web"
+comp_leadership_strategy: "Führung \& Strategie"
+comp_finance_expertise: "Finanzexpertise"
+comp_enterprise_systems: "Enterprise-Systeme"
+
+# Persönliche Angaben (optional, für DACH/Schweizer Lebensläufe)
+personal_date_of_birth: "Geburtsdatum"
+personal_nationality: "Staatsangehörigkeit"
+personal_residence: "Wohnort"
+personal_marital_status: "Familienstand"
+
+# Brief-Labels
+letter_subject_prefix: "Betr.:"
+letter_date_format: "d. MMMM yyyy"
+letter_date_culture: "de-DE"

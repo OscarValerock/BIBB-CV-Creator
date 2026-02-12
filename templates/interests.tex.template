@@ -3,7 +3,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \phantomsection
-\addcontentsline{toc}{section}{Interests \& Volunteering}
-\section*{Interests \& Volunteering}
+\addcontentsline{toc}{section}{{{SECTION_TITLE}}}
+\section*{{{SECTION_TITLE}}}
 
 {{INTERESTS_CONTENT}}

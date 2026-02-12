@@ -6,7 +6,7 @@
 #   Google_DataEngineer.md
 #   Microsoft_PlatformLead.md
 #
-# Personal info (name, contact) is automatically pulled from PersonalResumeData.md
+# Personal info (name, contact) is automatically pulled from PersonalResumeData_<lang>.md
 # =============================================================================
 
 # -----------------------------------------------------------------------------

@@ -1,0 +1,40 @@
+# =============================================================================
+# LANGUAGE LABELS - Español (es)
+# =============================================================================
+# Títulos de sección, etiquetas de UI y texto estructural para la generación del CV
+# =============================================================================
+
+# Títulos de sección
+section_professional_summary: "Resumen Profesional"
+section_core_competencies: "Competencias Clave"
+section_experience: "Experiencia Profesional"
+section_education: "Formación Académica"
+section_certifications: "Certificaciones"
+section_languages: "Idiomas"
+section_interests: "Intereses y Voluntariado"
+section_projects: "Proyectos Comunitarios y Open-Source"
+section_testimonials: "Testimonios"
+
+# Etiquetas de fecha
+present: "Actualidad"
+date_separator: "/"
+
+# Categorías de competencias
+comp_data_platforms_engineering: "Plataformas de Datos e Ingeniería"
+comp_business_intelligence: "Inteligencia de Negocios"
+comp_automation_development: "Automatización y Desarrollo"
+comp_full_stack_web: "Full Stack Web"
+comp_leadership_strategy: "Liderazgo y Estrategia"
+comp_finance_expertise: "Experiencia Financiera"
+comp_enterprise_systems: "Sistemas Empresariales"
+
+# Datos personales (opcional, para CVs DACH/suizos)
+personal_date_of_birth: "Fecha de nacimiento"
+personal_nationality: "Nacionalidad"
+personal_residence: "Residencia"
+personal_marital_status: "Estado civil"
+
+# Etiquetas de carta
+letter_subject_prefix: "Ref:"
+letter_date_format: "d 'de' MMMM 'de' yyyy"
+letter_date_culture: "es-ES"

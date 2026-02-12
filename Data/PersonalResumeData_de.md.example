@@ -1,0 +1,208 @@
+---
+# =============================================================================
+# CV-DATENDATEI - BEISPIEL
+# =============================================================================
+# Kopiere diese Datei nach PersonalResumeData_de.md und bearbeite sie
+# Dann ausführen: .\build.ps1 -Lang de
+# Ausgabe: [Dein Name] YYYYMMDD_de.pdf
+# =============================================================================
+
+version: 2.3
+last_updated: 2026-01-01
+
+# -----------------------------------------------------------------------------
+# SICHTBARKEIT DER ABSCHNITTE
+# Auf false setzen, um einen Abschnitt im CV auszublenden
+# -----------------------------------------------------------------------------
+sections:
+  header: true
+  professional_summary: true
+  core_competencies: true
+  experience: true
+  education: true
+  certifications: true
+  languages: true
+  interests_volunteering: true
+  community_open_source_projects: true
+  testimonials: true
+
+# -----------------------------------------------------------------------------
+# PERSÖNLICHE INFORMATIONEN
+# -----------------------------------------------------------------------------
+name: "JOHN DOE"
+headline: "Software-Ingenieur | Full-Stack-Entwickler | Cloud-Lösungen"
+location: "New York, USA"
+
+contact:
+  phone: "+1 (555) 123-4567"
+  email: "john.doe@example.com"
+  linkedin: "https://linkedin.com/in/johndoe"
+  github: "https://github.com/johndoe"
+
+# Optional: Persönliche Angaben (üblich in Schweizer/DACH-Lebensläufen)
+# Auskommentierung aufheben und ausfüllen, um sie im Header anzuzeigen
+# personal_details:
+#   date_of_birth: "15. März 1985"
+#   nationality: "Deutsch / Aufenthaltsbewilligung C"
+#   residence: "Zürich, Schweiz (seit 2018)"
+#   marital_status: "Verheiratet, 2 Kinder"
+
+# -----------------------------------------------------------------------------
+# BERUFLICHE ZUSAMMENFASSUNG
+# Verwende > für mehrzeiligen Text
+# -----------------------------------------------------------------------------
+professional_summary: >
+  Erfahrener Software-Ingenieur mit über 10 Jahren Erfahrung im Aufbau skalierbarer Webanwendungen und Cloud-Infrastruktur. Leidenschaftlich engagiert für sauberen Code, DevOps-Praktiken und die Förderung von Nachwuchsentwicklern. Nachgewiesene Erfolgsbilanz bei der termingerechten und budgetkonformen Lieferung wirkungsvoller Projekte.
+
+# -----------------------------------------------------------------------------
+# KERNKOMPETENZEN / FÄHIGKEITEN
+# Gruppiert nach Kategorie
+# -----------------------------------------------------------------------------
+core_competencies:
+  data_platforms_engineering:
+    - "PostgreSQL"
+    - "MongoDB"
+    - "Redis"
+    - "Elasticsearch"
+    - "Datenmodellierung"
+  business_intelligence:
+    - "Tableau"
+    - "Power BI"
+    - "SQL"
+    - "Datenvisualisierung"
+  automation_development:
+    - "Python"
+    - "JavaScript/TypeScript"
+    - "Go"
+    - "Docker"
+    - "Kubernetes"
+    - "CI/CD"
+  leadership_strategy:
+    - "Agile/Scrum"
+    - "Teamführung"
+    - "Technische Architektur"
+    - "Code Reviews"
+    - "Mentoring"
+  finance_expertise:
+    - "Budgetplanung"
+    - "Kostenoptimierung"
+    - "Lieferantenmanagement"
+
+# -----------------------------------------------------------------------------
+# BERUFSERFAHRUNG
+# Jede Stelle benötigt: title, company, location, start_date, end_date
+# Optional: company_url, description/responsibilities, achievements
+# Datumsformat: YYYY-MM (z.B. 2024-07) oder "Present"
+# -----------------------------------------------------------------------------
+experience:
+  - title: "Senior Software-Ingenieur"
+    company: "Tech Corp"
+    company_url: "https://www.techcorp.example.com/"
+    location: "New York, USA"
+    start_date: "2021-03"
+    end_date: "Present"
+    responsibilities: >
+      Leitung der Backend-Entwicklung für das Flaggschiffprodukt des Unternehmens, Mentoring eines Teams von 5 Ingenieuren und Steuerung architektonischer Entscheidungen.
+    achievements:
+      - "API-Antwortzeit um 60% reduziert durch Datenbankoptimierung und Caching-Strategien."
+      - "Migration von monolithischer Architektur zu Microservices geleitet, Deployment-Frequenz um 300% verbessert."
+      - "Automatisierte Test-Pipeline implementiert mit 95% Code-Abdeckung."
+
+  - title: "Software-Ingenieur"
+    company: "StartupXYZ"
+    location: "San Francisco, USA"
+    start_date: "2018-06"
+    end_date: "2021-02"
+    description: >
+      Full-Stack-Entwicklung mit React, Node.js und AWS. Zusammenarbeit mit dem Produktteam zur Bereitstellung benutzerorientierter Funktionen.
+    achievements:
+      - "Echtzeit-Benachrichtigungssystem für über 100K täglich aktive Nutzer aufgebaut."
+      - "RESTful-APIs entwickelt, die von mobilen und Web-Clients genutzt werden."
+      - "3 Junior-Entwickler durch Onboarding und Code Reviews betreut."
+
+  - title: "Junior-Entwickler"
+    company: "Agency Inc"
+    location: "Boston, USA"
+    start_date: "2015-01"
+    end_date: "2018-05"
+    achievements:
+      - "Über 20 Kundenprojekte mit WordPress, PHP und JavaScript umgesetzt."
+      - "Git-basierten Workflow eingeführt und Teamzusammenarbeit verbessert."
+
+# -----------------------------------------------------------------------------
+# AUSBILDUNG
+# Jeder Eintrag: degree, institution, location, start_year, end_year
+# -----------------------------------------------------------------------------
+education:
+  - degree: "MSc – Informatik"
+    institution: "MIT"
+    location: "Cambridge, USA"
+    start_year: "2013"
+    end_year: "2015"
+  - degree: "BSc – Software Engineering"
+    institution: "State University"
+    location: "Boston, USA"
+    start_year: "2009"
+    end_year: "2013"
+
+# -----------------------------------------------------------------------------
+# ZERTIFIZIERUNGEN
+# Einfache Liste von Zertifizierungsnamen
+# -----------------------------------------------------------------------------
+certifications:
+  - "AWS Solutions Architect Professional"
+  - "Kubernetes Administrator (CKA)"
+  - "Google Cloud Professional Data Engineer"
+
+# -----------------------------------------------------------------------------
+# SPRACHEN
+# Jeweils: Sprache und Kompetenzniveau
+# -----------------------------------------------------------------------------
+languages:
+  - language: "Englisch"
+    level: "Muttersprache"
+  - language: "Spanisch"
+    level: "Mittelstufe"
+
+# -----------------------------------------------------------------------------
+# INTERESSEN & EHRENAMT
+# Format: "Kategorie: Beschreibung"
+# -----------------------------------------------------------------------------
+interests_volunteering:
+  - "Ehrenamt: Programmierlehrer im lokalen Gemeindezentrum, Unterricht für benachteiligte Jugendliche."
+  - "Open Source: Aktiver Beitragender zu mehreren beliebten JavaScript-Bibliotheken."
+
+# -----------------------------------------------------------------------------
+# COMMUNITY- & OPEN-SOURCE-PROJEKTE
+# Jeweils: title, url, description, technologies (optional)
+# -----------------------------------------------------------------------------
+community_open_source_projects:
+  - title: "Awesome Project"
+    url: "https://github.com/johndoe/awesome-project"
+    description: "Ein CLI-Tool zur Automatisierung von Entwicklungs-Workflows mit über 500 GitHub-Sternen."
+    technologies:
+      - "Go"
+      - "Docker"
+      - "GitHub Actions"
+  - title: "React Component Library"
+    url: "https://github.com/johndoe/react-components"
+    description: "Wiederverwendbare React-Komponenten mit TypeScript-Unterstützung und umfassender Dokumentation."
+    technologies:
+      - "React"
+      - "TypeScript"
+      - "Storybook"
+
+# -----------------------------------------------------------------------------
+# REFERENZEN
+# Jeweils: quote (verwende > für mehrzeilig) und source
+# -----------------------------------------------------------------------------
+testimonials:
+  - quote: >
+      "John ist ein aussergewöhnlicher Ingenieur, der durchgehend hochwertige Arbeit liefert.
+      Seine technische Expertise und sein kollaborativer Ansatz machen ihn für jedes Team unverzichtbar."
+    source: "Engineering Manager, Tech Corp"
+  - quote: >
+      "Die Zusammenarbeit mit John war ein Vergnügen. Er hat die einzigartige Fähigkeit, komplexe Probleme aufzuschlüsseln
+      und Lösungen sowohl technischen als auch nicht-technischen Stakeholdern klar zu kommunizieren."
+    source: "Product Manager, StartupXYZ"
+---
