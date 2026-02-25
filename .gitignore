@@ -14,10 +14,12 @@
 # Generated PDFs (output files)
 *.pdf
 
-# Generated .tex files (auto-created by build.ps1)
+# Generated .tex files (auto-created by build scripts)
 cv.tex
 letter.tex
+certifications_book.tex
 sections/*.tex
+sections/certs_staging/
 
 # Output directory
 output/
@@ -50,3 +52,7 @@ desktop.ini
 # Backup files
 *.bak
 *.backup
+
+# Additional for courses and certifications
+*.jpg
+*.png
