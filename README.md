@@ -13,6 +13,29 @@ Generates professional PDF CVs and motivation letters from YAML data files using
 
 ---
 
+## Try the Demo
+
+Test the builder right after cloning — no setup needed beyond LaTeX.
+
+1. Rename the example file (removes the `.example` extension):
+   ```powershell
+   Rename-Item Data\PersonalResumeData_en.md.example Data\PersonalResumeData_en.md
+   ```
+2. Build the demo CV:
+   ```powershell
+   .\build.ps1
+   ```
+3. Build the sample motivation letter:
+   ```powershell
+   .\build.ps1 letter _SAMPLE
+   ```
+
+Output: `output/cv/John Doe YYYYMMDD_en.pdf` and `output/letters/_SAMPLE (YYYY.MM.DD).pdf`
+
+> When you're ready to use your own data, edit `Data/PersonalResumeData_en.md` in place.
+
+---
+
 ## Quick Start
 
 ### Build Your CV
@@ -28,6 +51,19 @@ Generates professional PDF CVs and motivation letters from YAML data files using
 > First build may take several minutes while MiKTeX downloads required packages.
 
 ### Build a Motivation Letter
+
+A ready-to-use sample letter is included for testing:
+
+```powershell
+.\build.ps1 letter _SAMPLE
+```
+
+Output: `output/letters/_SAMPLE (YYYY.MM.DD).pdf`
+
+> Requires `Data/PersonalResumeData_en.md` to exist (personal info is pulled from it automatically).
+> If you haven't done so yet, rename the example file first — see [Try the Demo](#try-the-demo).
+
+To write your own letter:
 
 1. Copy `Data/MotivationLetters/_TEMPLATE.md` → `Data/MotivationLetters/CompanyName_Position.md`
 2. Fill in recipient info and letter body
@@ -118,6 +154,7 @@ BIBB-CV-Creator/
 │   ├── PersonalResumeData_de_ch.md       ← YOUR CV DATA - Swiss variant (gitignored)
 │   └── MotivationLetters/
 │       ├── _TEMPLATE.md                  ← Copy this for new letters
+│       ├── _SAMPLE.md                    ← Sample letter (tracked, for demo)
 │       └── CompanyName_Position.md       ← Your letters (gitignored)
 ├── output/                               ← Generated PDFs (gitignored)
 │   ├── cv/
