@@ -22,14 +22,16 @@ sections/*.tex
 # Output directory
 output/
 
-# Personal data (keep only examples)
+# Personal data (keep only examples and demo)
 Data/PersonalResumeData_*.md
 !Data/PersonalResumeData_*.md.example
+!Data/PersonalResumeData_demo.md
 photo.png
 
-# Motivation letters (keep only template)
+# Motivation letters (keep only template and sample)
 Data/MotivationLetters/*
 !Data/MotivationLetters/_TEMPLATE.md
+!Data/MotivationLetters/_SAMPLE.md
 
 # Claude Code local settings
 .claude/*.local.json
