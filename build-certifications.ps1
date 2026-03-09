@@ -3,7 +3,9 @@
 # Source: Data/Education/Formal and Data/Education/Courses
 # Filename convention: Provider - Certification Name - YYYY.MM.pdf
 
-param()
+param(
+    [string]$Lang = "en"
+)
 
 $ScriptDir = $PSScriptRoot
 if (-not $ScriptDir) { $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -95,6 +97,30 @@ function Build-Include {
 }
 
 #######################################
+# LABELS
+#######################################
+
+function Load-Labels {
+    param([string]$lang)
+    # Normalize: de_ch -> de
+    $baseLang = $lang -replace '_.*', ''
+    $labelsFile = Join-Path $ScriptDir "config\labels_$baseLang.yaml"
+    if (-not (Test-Path $labelsFile)) {
+        Write-Host "[WARN] Labels file not found for lang '$lang', falling back to 'en'" -ForegroundColor Yellow
+        $labelsFile = Join-Path $ScriptDir "config\labels_en.yaml"
+    }
+    $labels = @{}
+    foreach ($line in (Get-Content $labelsFile -Encoding UTF8)) {
+        if ($line -match '^\s*([^#:][^:]*?)\s*:\s*"(.*)"\s*$') {
+            $labels[$matches[1].Trim()] = $matches[2]
+        } elseif ($line -match '^\s*([^#:][^:]*?)\s*:\s*(.+)\s*$') {
+            $labels[$matches[1].Trim()] = $matches[2].Trim()
+        }
+    }
+    return $labels
+}
+
+#######################################
 # MAIN
 #######################################
 
@@ -110,6 +136,23 @@ if ($rawData -notmatch 'name:\s*"?([^"\r\n]+)"?') {
     exit 1
 }
 $authorName = $matches[1].Trim() -replace '"', ''
+
+# Load language labels
+$labels = Load-Labels $Lang
+function lbl([string]$key, [string]$default) { if ($labels[$key]) { $labels[$key] } else { $default } }
+$lbl_subtitle       = lbl 'cert_subtitle'            'Certifications \& Diplomas'
+$lbl_section_index  = lbl 'cert_section_index'       'Index'
+$lbl_col_provider   = lbl 'cert_col_provider'        'Provider'
+$lbl_col_cert       = lbl 'cert_col_certification'   'Certification'
+$lbl_col_date       = lbl 'cert_col_date'            'Date'
+$lbl_col_page       = lbl 'cert_col_page'            'Page'
+$lbl_group_formal   = lbl 'cert_group_formal'        'Formal Education'
+$lbl_group_courses  = lbl 'cert_group_courses'       'Courses \& Certifications'
+$lbl_sec_formal     = lbl 'cert_section_formal'      'Formal Education'
+$lbl_sec_courses    = lbl 'cert_section_courses'     'Courses \& Certifications'
+$lbl_continued      = lbl 'cert_continued'           '(continued \ldots)'
+
+Write-Host "Language: $Lang" -ForegroundColor Cyan
 
 # Title-cased ASCII version for the output filename (strips accents)
 $authorNameFile = [Text.Encoding]::ASCII.GetString([Text.Encoding]::GetEncoding("Cyrillic").GetBytes($authorName))
@@ -189,7 +232,7 @@ $template = @'
 \usepackage{needspace}
 \usepackage{charter}
 \usepackage[
-    pdftitle={TMPL_AUTHOR -- Certifications and Diplomas},
+    pdftitle={TMPL_AUTHOR -- TMPL_SUBTITLE},
     pdfauthor={TMPL_AUTHOR},
     colorlinks=true,
     urlcolor=primaryColor,
@@ -219,55 +262,66 @@ $template = @'
 
 \vspace{5pt}
 
-\noindent{\small\color{gray}\textit{Certifications \& Diplomas}}
+\noindent{\small\color{gray}\textit{TMPL_SUBTITLE}}
 
 \vspace{8pt}
 \noindent\textcolor{accentcolor}{\rule{\linewidth}{0.5pt}}
 \vspace{1.5cm}
 
 %% Index
-\section{Index}
+\section{TMPL_SECTION_INDEX}
 
 \begin{longtable}{@{} p{3cm} p{9.5cm} p{1.8cm} r @{}}
   \toprule
-  \textbf{Provider} & \textbf{Certification} & \textbf{Date} & \textbf{Page} \\
+  \textbf{TMPL_COL_PROVIDER} & \textbf{TMPL_COL_CERT} & \textbf{TMPL_COL_DATE} & \textbf{TMPL_COL_PAGE} \\
   \midrule
   \endfirsthead
-  \multicolumn{4}{c}{\small\textit{(continued \ldots)}} \\[4pt]
+  \multicolumn{4}{c}{\small\textit{TMPL_CONTINUED}} \\[4pt]
   \toprule
-  \textbf{Provider} & \textbf{Certification} & \textbf{Date} & \textbf{Page} \\
+  \textbf{TMPL_COL_PROVIDER} & \textbf{TMPL_COL_CERT} & \textbf{TMPL_COL_DATE} & \textbf{TMPL_COL_PAGE} \\
   \midrule
   \endhead
   \bottomrule
   \endlastfoot
 
-  \multicolumn{4}{@{}l}{\small\bfseries\color{accentcolor}Formal Education} \\[3pt]
+  \multicolumn{4}{@{}l}{\small\bfseries\color{accentcolor}TMPL_GROUP_FORMAL} \\[3pt]
 TMPL_FORMAL_INDEX
 \noalign{\vspace{6pt}}
-  \multicolumn{4}{@{}l}{\small\bfseries\color{accentcolor}Courses \& Certifications} \\[3pt]
+  \multicolumn{4}{@{}l}{\small\bfseries\color{accentcolor}TMPL_GROUP_COURSES} \\[3pt]
 TMPL_COURSES_INDEX
 \end{longtable}
 
 \newpage
 
 %% Formal Education
-\section{Formal Education}
+\section{TMPL_SEC_FORMAL}
 
 TMPL_FORMAL_INC
 
 %% Courses and Certifications
-\section{Courses \& Certifications}
+\section{TMPL_SEC_COURSES}
 
 TMPL_COURSES_INC
 
 \end{document}
 '@
 
-$tex = $template.Replace('TMPL_AUTHOR',        $authorEsc)
-$tex = $tex.Replace('TMPL_FORMAL_INDEX',  $formalIndexRows)
-$tex = $tex.Replace('TMPL_COURSES_INDEX', $coursesIndexRows)
-$tex = $tex.Replace('TMPL_FORMAL_INC',    $formalIncludes)
-$tex = $tex.Replace('TMPL_COURSES_INC',   $coursesIncludes)
+$tex = $template.Replace('TMPL_AUTHOR',         $authorEsc)
+$tex = $tex.Replace('TMPL_SUBTITLE',       $lbl_subtitle)
+$tex = $tex.Replace('TMPL_SECTION_INDEX',  $lbl_section_index)
+$tex = $tex.Replace('TMPL_COL_PROVIDER',   $lbl_col_provider)
+$tex = $tex.Replace('TMPL_COL_CERT',       $lbl_col_cert)
+$tex = $tex.Replace('TMPL_COL_DATE',       $lbl_col_date)
+$tex = $tex.Replace('TMPL_COL_PAGE',       $lbl_col_page)
+$tex = $tex.Replace('TMPL_GROUP_FORMAL',   $lbl_group_formal)
+$tex = $tex.Replace('TMPL_GROUP_COURSES',  $lbl_group_courses)
+$tex = $tex.Replace('TMPL_SEC_FORMAL',     $lbl_sec_formal)
+$tex = $tex.Replace('TMPL_SEC_COURSES',    $lbl_sec_courses)
+$tex = $tex.Replace('TMPL_CONTINUED',      $lbl_continued)
+$tex = $tex.Replace('TMPL_FORMAL_INDEX',   $formalIndexRows)
+$tex = $tex.Replace('TMPL_COURSES_INDEX',  $coursesIndexRows)
+$tex = $tex.Replace('TMPL_FORMAL_INC',     $formalIncludes)
+$tex = $tex.Replace('TMPL_COURSES_INC',    $coursesIncludes)
 
 [System.IO.File]::WriteAllText($TexFile, $tex, [System.Text.Encoding]::UTF8)
 Write-Host "Generated: certifications_book.tex" -ForegroundColor Green
@@ -302,7 +356,7 @@ Pop-Location
 #######################################
 
 $srcPdf  = Join-Path $ScriptDir "certifications_book.pdf"
-$outName = "$authorNameFile Education $(Get-Date -Format 'yyyyMMdd').pdf"
+$outName = "$authorNameFile Education $(Get-Date -Format 'yyyyMMdd')_$Lang.pdf"
 $destPdf = Join-Path $OutputDir $outName
 
 if (Test-Path $srcPdf) {

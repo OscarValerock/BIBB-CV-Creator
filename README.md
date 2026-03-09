@@ -116,6 +116,27 @@ Personal info (name, contact) is automatically pulled from your CV data file.
 .\build.ps1 letter Microsoft_PlatformLead -Lang de
 ```
 
+### Certifications Document Commands
+
+Generates a consolidated PDF booklet with cover, clickable index, and all certificates included.
+
+| Command | What it does |
+|---------|--------------|
+| `.\build-certifications.ps1` | Build English certifications document |
+| `.\build-certifications.ps1 -Lang de` | Build with German labels |
+| `.\build-certifications.ps1 -Lang es` | Build with Spanish labels |
+| `.\build-certifications.ps1 -Lang de_ch` | Build with Swiss German labels (falls back to `de`) |
+
+Output: `output/certifications/Your Name Education YYYYMMDD_<lang>.pdf`
+
+Source files are read from:
+- `Data/Education/Formal/` — degrees and diplomas
+- `Data/Education/Courses/` — online courses and certifications
+
+Filename convention: `Provider - Certification Name - YYYY.MM.pdf`
+
+**Reducing PDF size:** The generated file can be large if the source certificates are scanned at high resolution. To reduce file size, use a free online tool such as [Smallpdf](https://smallpdf.com/compress-pdf), [ILovePDF](https://www.ilovepdf.com/compress_pdf), or [PDF2Go](https://www.pdf2go.com/compress-pdf) after building.
+
 ---
 
 ## Editing Your CV
@@ -158,8 +179,10 @@ BIBB-CV-Creator/
 │       └── CompanyName_Position.md       ← Your letters (gitignored)
 ├── output/                               ← Generated PDFs (gitignored)
 │   ├── cv/
-│   └── letters/
-├── build.ps1                             ← Build script
+│   ├── letters/
+│   └── certifications/
+├── build.ps1                             ← CV & letter build script
+├── build-certifications.ps1             ← Certifications document build script
 ├── templates/                            ← LaTeX templates
 ├── sections/                             ← Generated .tex files (auto-created)
 ├── config/
@@ -184,7 +207,7 @@ BIBB-CV-Creator/
 3. Optionally create `Data/PersonalResumeData_xx.md.example` with placeholder data
 4. Build with `.\build.ps1 -Lang xx`
 
-The labels file controls section headings, competency category names, date separators, the "Present" label, letter subject prefix, date format/culture, and personal details field labels.
+The labels file controls section headings, competency category names, date separators, the "Present" label, letter subject prefix, date format/culture, personal details field labels, and certifications document UI text (index title, column headers, group names).
 
 ### Market-Specific Variants
 
@@ -274,3 +297,7 @@ Drafts a complete motivation letter ready to paste into a `.md` file and build.
 **PDF not updating?**
 - Close the PDF viewer
 - Run `.\build.ps1 rebuild`
+
+**Script cannot be loaded / not digitally signed?**
+- Run once to unblock: `Unblock-File .\build-certifications.ps1`
+- Same fix applies to `build.ps1` if it ever hits the same issue
