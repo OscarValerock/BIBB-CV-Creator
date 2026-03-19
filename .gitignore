@@ -34,6 +34,9 @@ Data/MotivationLetters/*
 !Data/MotivationLetters/_TEMPLATE.md
 !Data/MotivationLetters/_SAMPLE.md
 
+# App data (keep only example)
+app/JobApplications.json
+
 # Claude Code local settings
 .claude/*.local.json
 

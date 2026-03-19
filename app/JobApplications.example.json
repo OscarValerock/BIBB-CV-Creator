@@ -1,0 +1,40 @@
+[
+  {
+    "id": 1,
+    "company": "Acme Corp AG",
+    "role": "Senior Data Engineer",
+    "location": "Zürich, Switzerland",
+    "date_assessed": "2026-01-01",
+    "date_applied": "2026-01-02",
+    "status": "Applied",
+    "outcome": "Interview",
+    "rejection_reason": null,
+    "fit_score": 78,
+    "letter_file": "Data/MotivationLetters/AcmeCorp_SeniorDataEngineer.md",
+    "contact": "Jane Doe, HR Manager",
+    "language": "en",
+    "reasoning": "Strong technical match on core stack. Minor gap on domain experience, addressed in letter.",
+    "key_gaps": ["No industry-specific experience"],
+    "salary_expectation_chf": "150000-170000",
+    "notes": "Applied via company website. Follow-up sent on 2026-01-10."
+  },
+  {
+    "id": 2,
+    "company": "Example GmbH",
+    "role": "Head of Analytics",
+    "location": "Bern, Switzerland",
+    "date_assessed": "2026-01-05",
+    "date_applied": null,
+    "status": "Not Applied",
+    "outcome": null,
+    "rejection_reason": null,
+    "fit_score": 45,
+    "letter_file": null,
+    "contact": null,
+    "language": "de",
+    "reasoning": "Hard disqualifier: role requires C1 French; candidate has no French proficiency.",
+    "key_gaps": ["French C1 required", "Public sector experience required"],
+    "salary_expectation_chf": null,
+    "notes": "Revisit if French improves to B2+."
+  }
+]

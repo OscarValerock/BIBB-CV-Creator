@@ -997,10 +997,10 @@ function Build-Letter {
             New-Item -ItemType Directory -Path $letterOutputDir -Force | Out-Null
         }
 
-        # Rename to "<LetterFileName> (yyyy.MM.dd).pdf"
-        $date = Get-Date -Format "yyyy.MM.dd"
+        # Rename to "<LetterFileName> YYYYMMDD.pdf"
+        $date = Get-Date -Format "yyyyMMdd"
         $baseName = [System.IO.Path]::GetFileNameWithoutExtension($letterFile)
-        $outputName = Join-Path $letterOutputDir "$baseName ($date).pdf"
+        $outputName = Join-Path $letterOutputDir "$baseName $date.pdf"
 
         # Remove existing file and move new one
         if (Test-Path $outputName) {

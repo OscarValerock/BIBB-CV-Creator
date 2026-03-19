@@ -82,15 +82,22 @@ Only present fields are rendered. When the block is absent, the header is unchan
 
 ## Skills & Workflow
 
-Two slash commands are available for AI-assisted job application work. See their files in `.claude/commands/` for full behavior.
+Three slash commands are available for AI-assisted job application work. See their files in `.claude/commands/` for full behavior.
 
 | Command | Purpose |
 |---------|---------|
 | `/assess-position` | Evaluate fit for a role: fit score, matched requirements, gaps/disqualifiers, strategy |
 | `/draft-letter` | Draft a complete motivation letter `.md` file ready to paste and build |
+| `/log-applications` | Scan the session, update `app/JobApplications.json` with all assessed/applied positions |
 
 **Typical workflow**:
 1. Find a job posting
 2. Run `/assess-position` with the job description — decide whether to apply and what angles to use
 3. Run `/draft-letter` with the job description — get a ready-to-paste letter body
 4. Save to `Data/MotivationLetters/CompanyName_Role.md`, refine, then run `.\build.ps1 letter <name>`
+5. At the end of the session, run `/log-applications` to persist all decisions to `app/JobApplications.json`
+
+**Application log** (`app/JobApplications.json`):
+- Gitignored personal file — tracks all assessed positions, decisions, fit scores, outcomes
+- `app/JobApplications.example.json` is the tracked schema reference
+- Update `outcome` field manually as responses arrive (`"Pending"` → `"Interview"` / `"Rejected"` / `"Offer"`)
